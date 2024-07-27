@@ -36,6 +36,6 @@ describe('StringCalculatorService', () => {
   });
 
   it('should throw an exception for negative numbers', () => {
-    expect(() => service.add('1,-2,3')).toThrow('negative numbers not allowed -2');
+    expect(() => service.add('1,-2,3')).toThrowError('negative numbers not allowed -2');
   });
 });

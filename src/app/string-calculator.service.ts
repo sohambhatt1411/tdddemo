@@ -9,7 +9,7 @@ export class StringCalculatorService {
       return 0;
     }
 
-    let delimiter = /[\n,]/;
+    let delimiter = /[\n,]/; // Regular expression to handle commas and new lines
     if (numbers.startsWith('//')) {
       const parts = numbers.split('\n');
       delimiter = new RegExp(parts[0].slice(2));
