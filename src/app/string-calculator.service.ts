@@ -9,28 +9,32 @@ export class StringCalculatorService {
       return 0;
     }
 
-    // Handle custom delimiters if provided
     let delimiter = /[\n,]/; // Default delimiters are new lines and commas
 
+    // Check if a custom delimiter is specified
     if (numbers.startsWith('//')) {
-      const parts = numbers.split('\n');
-      delimiter = new RegExp(parts[0].slice(2)); // Extract custom delimiter
-      numbers = parts[1];
-    } else {
-      // Log the original input
-      console.log('Original input:', JSON.stringify(numbers));
+      // Extract the custom delimiter and numbers part
+      const delimiterEndIndex = numbers.indexOf('\n');
+      const customDelimiterPart = numbers.substring(2, delimiterEndIndex).trim(); // Extract and trim the custom delimiter
 
+      // Escape special characters in the delimiter for regex
+      const escapedDelimiter = customDelimiterPart
+        .replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+      delimiter = new RegExp(escapedDelimiter); // Use the custom delimiter
+
+      // Extract the numbers part after the delimiter line
+      numbers = numbers.substring(delimiterEndIndex + 1);
+    } else {
       // Replace escaped new lines (\\n) with actual new lines
       numbers = numbers.replace(/\\n/g, '\n');
-
-      // Replace new lines and carriage returns with commas for consistent splitting
-      numbers = numbers.replace(/[\r\n]+/g, ',');
-      console.log('After replacing new lines:', JSON.stringify(numbers));
     }
 
+    // Replace all new lines and carriage returns with commas
+    numbers = numbers.replace(/[\r\n]+/g, ',');
+
     // Split the numbers using the delimiter
-    const numArray = numbers.split(delimiter);
-    console.log('Split numbers:', numArray);
+    const numArray = numbers.split(delimiter).filter(num => num.trim() !== '');
+    console.log('Split numbers:', numArray); // Debug log
 
     // Filter out negative numbers and throw an error if any are found
     const negatives = numArray.filter(num => parseInt(num, 10) < 0);
